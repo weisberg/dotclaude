@@ -16,6 +16,7 @@ The core idea is simple: route work by **cost of being wrong**, then spend only 
 | [`agents/mega-opus-redteam.md`](agents/mega-opus-redteam.md) | Post-delivery adversarial verifier: attacks claims under strict input isolation and audits the evidence ledger. |
 | [`agents/compliance-reviewer.md`](agents/compliance-reviewer.md) | Financial-services regulatory preflight: flags FINRA 2210 / SEC Marketing Rule risks and never clears content. |
 | [`agents/taxonomy-miner.md`](agents/taxonomy-miner.md) | Failure distillation agent: turns confirmed misses into taxonomy entries and known-answer test proposals. |
+| [`agents/can-and-does-do-better.md`](agents/can-and-does-do-better.md) | Context-isolated finalizer agent that uses the review skill to materially improve an existing deliverable. |
 | [`skills/analytics-spec-builder/SKILL.md`](skills/analytics-spec-builder/SKILL.md) | Installable skill for turning scoped analytics requests into implementation-ready specs. |
 | [`skills/_packages/analytics-spec-builder.zip`](skills/_packages/analytics-spec-builder.zip) | Packaged copy of the analytics spec builder skill for installation or distribution. |
 | [`skills/expo-mobile-app/SKILL.md`](skills/expo-mobile-app/SKILL.md) | Installable skill for building, reviewing, refactoring, and polishing Expo / React Native apps. |
@@ -105,6 +106,8 @@ Skip steps consciously, not silently. If a T3 run skips premortem, redteam, or c
 **compliance-reviewer** is structurally incapable of clearance. Its best positive verdict is no flags found at this screen level, with human compliance review still required. It combines mechanical pattern screens with two adversarial reads: the least sophisticated likely reader and the examiner with a highlighter.
 
 **taxonomy-miner** protects the improvement loop from anecdote laundering. It reads existing taxonomy canon before evidence, distinguishes new entries from amendments, parks one-off incidents as candidates, and treats already-covered failures as binding failures of the protocol rather than taxonomy gaps.
+
+**can-and-does-do-better** is a finalizer agent for context-window management. It uses the `can-and-must-do-better` skill, but runs as a separate agent/fork so high-volume review work stays out of the parent conversation. Its contract is to produce a materially improved final result, report what improved, state what was verified, and avoid stopping at critique.
 
 ## Skill Packages
 
