@@ -8,25 +8,25 @@ The core idea is simple: route work by **cost of being wrong**, then spend only 
 
 | File | Purpose |
 |---|---|
-| [`fleet-orchestration.md`](fleet-orchestration.md) | The conductor protocol: tier routing, T3 lifecycle, handoff payloads, verdict handling, relay discipline. Read this first. |
-| [`mega-opus-generalist.md`](mega-opus-generalist.md) | High-rigor worker for complex non-analytics tasks: research, writing, code, planning, reviews, decision support. |
-| [`mega-opus-analytics.md`](mega-opus-analytics.md) | High-rigor worker for stakeholder-facing SQL and analytics: metric definitions, recon, query discipline, verification ledger, recomputation. |
-| [`canon-scout.md`](canon-scout.md) | Metric provenance agent: finds canonical definitions, variants, conflicts, and anchor values before analytics work starts. |
-| [`premortem.md`](premortem.md) | Pre-execution plan attacker: reads the worker's plan before sunk cost exists and proposes targeted amendments. |
-| [`mega-opus-redteam.md`](mega-opus-redteam.md) | Post-delivery adversarial verifier: attacks claims under strict input isolation and audits the evidence ledger. |
-| [`compliance-reviewer.md`](compliance-reviewer.md) | Financial-services regulatory preflight: flags FINRA 2210 / SEC Marketing Rule risks and never clears content. |
-| [`taxonomy-miner.md`](taxonomy-miner.md) | Failure distillation agent: turns confirmed misses into taxonomy entries and known-answer test proposals. |
+| [`docs/fleet-orchestration.md`](docs/fleet-orchestration.md) | The conductor protocol: tier routing, T3 lifecycle, handoff payloads, verdict handling, relay discipline. Read this first. |
+| [`agents/mega-opus-generalist.md`](agents/mega-opus-generalist.md) | High-rigor worker for complex non-analytics tasks: research, writing, code, planning, reviews, decision support. |
+| [`agents/mega-opus-analytics.md`](agents/mega-opus-analytics.md) | High-rigor worker for stakeholder-facing SQL and analytics: metric definitions, recon, query discipline, verification ledger, recomputation. |
+| [`agents/canon-scout.md`](agents/canon-scout.md) | Metric provenance agent: finds canonical definitions, variants, conflicts, and anchor values before analytics work starts. |
+| [`agents/premortem.md`](agents/premortem.md) | Pre-execution plan attacker: reads the worker's plan before sunk cost exists and proposes targeted amendments. |
+| [`agents/mega-opus-redteam.md`](agents/mega-opus-redteam.md) | Post-delivery adversarial verifier: attacks claims under strict input isolation and audits the evidence ledger. |
+| [`agents/compliance-reviewer.md`](agents/compliance-reviewer.md) | Financial-services regulatory preflight: flags FINRA 2210 / SEC Marketing Rule risks and never clears content. |
+| [`agents/taxonomy-miner.md`](agents/taxonomy-miner.md) | Failure distillation agent: turns confirmed misses into taxonomy entries and known-answer test proposals. |
 | [`skills/analytics-spec-builder/SKILL.md`](skills/analytics-spec-builder/SKILL.md) | Installable skill for turning scoped analytics requests into implementation-ready specs. |
-| [`skills/analytics-spec-builder.zip`](skills/analytics-spec-builder.zip) | Packaged copy of the analytics spec builder skill for installation or distribution. |
+| [`skills/_packages/analytics-spec-builder.zip`](skills/_packages/analytics-spec-builder.zip) | Packaged copy of the analytics spec builder skill for installation or distribution. |
 | [`skills/expo-mobile-app/SKILL.md`](skills/expo-mobile-app/SKILL.md) | Installable skill for building, reviewing, refactoring, and polishing Expo / React Native apps. |
-| [`skills/expo-mobile-app-skill.zip`](skills/expo-mobile-app-skill.zip) | Packaged copy of the Expo mobile app skill for installation or distribution. |
+| [`skills/_packages/expo-mobile-app-skill.zip`](skills/_packages/expo-mobile-app-skill.zip) | Packaged copy of the Expo mobile app skill for installation or distribution. |
 | [`skills/gpt-5.5-xhigh/SKILL.md`](skills/gpt-5.5-xhigh/SKILL.md) | Installable operating-mode skill for high-rigor analytics, BI, strategy, and executive decision-support work. |
-| [`skills/gpt-5.5-xhigh-skill.zip`](skills/gpt-5.5-xhigh-skill.zip) | Packaged copy of the GPT-5.5-xhigh operating skill for installation or distribution. |
+| [`skills/_packages/gpt-5.5-xhigh-skill.zip`](skills/_packages/gpt-5.5-xhigh-skill.zip) | Packaged copy of the GPT-5.5-xhigh operating skill for installation or distribution. |
 | [`skills/can-and-must-do-better/SKILL.md`](skills/can-and-must-do-better/SKILL.md) | Installable second-pass self-review skill for improving analytics, BI, strategy, code, and writing deliverables. |
-| [`skills/can-and-must-do-better-skill.zip`](skills/can-and-must-do-better-skill.zip) | Packaged copy of the can-and-must-do-better skill for installation or distribution. |
-| [`Research Report.md`](Research%20Report.md) | Point-in-time June 2026 source material for a future Expo + beautiful mobile UI skill. Verify recency-sensitive claims before using. |
+| [`skills/_packages/can-and-must-do-better-skill.zip`](skills/_packages/can-and-must-do-better-skill.zip) | Packaged copy of the can-and-must-do-better skill for installation or distribution. |
+| [`skills/expo-mobile-app/references/expo-mobile-ui-research.md`](skills/expo-mobile-app/references/expo-mobile-ui-research.md) | Point-in-time June 2026 source material for the Expo mobile app skill. Verify recency-sensitive claims before using. |
 
-Most files with frontmatter are intended to be usable as subagent definitions in a Claude Code-style environment. The orchestration file is for the main caller, not for the subagents themselves.
+Files under `agents/` are intended to be usable as subagent definitions in a Claude Code-style environment. Files under `skills/<name>/SKILL.md` are installable skills. Zip artifacts live under `skills/_packages/` so the `skills/` directory contains both source skills and distributable packages without mixing them with root docs.
 
 ## Architecture
 
@@ -174,9 +174,9 @@ These files deliberately repeat some conventions because agent definitions canno
 
 ## How To Use This Repo
 
-1. Read [`fleet-orchestration.md`](fleet-orchestration.md) to understand routing and handoffs.
+1. Read [`docs/fleet-orchestration.md`](docs/fleet-orchestration.md) to understand routing and handoffs.
 2. Install or copy the agent definition files into your agent runtime's subagent location.
-3. Install or copy skills from `skills/` into your runtime's skill location; use the zip package when an installer expects an archive.
+3. Install or copy skills from `skills/<name>/` into your runtime's skill location; use packages from `skills/_packages/` when an installer expects an archive.
 4. Put the orchestration protocol somewhere the main agent will read, such as a project-level instruction file.
 5. For T3 analytics work, run `canon-scout` before `mega-opus-analytics`.
 6. For T3 worker runs, ask the worker for `plan-only`, run `premortem`, apply accepted amendments into `_work/`, then re-invoke the worker to execute.
@@ -188,7 +188,7 @@ If your runtime differs from Claude Code-style frontmatter (`name`, `description
 
 ## Maintenance Notes
 
-- Treat [`fleet-orchestration.md`](fleet-orchestration.md) as the normative version of shared orchestration contracts. When a contract changes, update it there first, then propagate to the relevant agents.
+- Treat [`docs/fleet-orchestration.md`](docs/fleet-orchestration.md) as the normative version of shared orchestration contracts. When a contract changes, update it there first, then propagate to the relevant agents.
 - Keep redteam isolation strict. Passing worker reasoning into the redteam makes the redteam verdict materially weaker.
 - Keep compliance language conservative. The compliance agent flags and routes; it does not clear.
 - Keep taxonomy mining evidence-backed. One incident can be a candidate, but not a fully promoted pattern.
