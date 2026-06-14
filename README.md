@@ -1,6 +1,6 @@
 # dotclaude
 
-`dotclaude` is a small prompt-engineering repo for a high-rigor Claude-style agent fleet. It is not an application or library; it is a set of Markdown agent definitions plus an orchestration protocol for work where being wrong is expensive.
+`dotclaude` is a small prompt-engineering repo for high-rigor Claude-style agent work. It is not an application or library; it is a set of Markdown agent definitions, skill packages, and orchestration notes for work where being wrong is expensive.
 
 The core idea is simple: route work by **cost of being wrong**, then spend only the amount of verification that cost justifies. Low-stakes work stays lightweight. High-stakes work gets provenance checks, explicit assumptions, mechanical gates, premortem review, adversarial redteam, compliance screening, and post-failure taxonomy mining.
 
@@ -16,6 +16,11 @@ The core idea is simple: route work by **cost of being wrong**, then spend only 
 | [`mega-opus-redteam.md`](mega-opus-redteam.md) | Post-delivery adversarial verifier: attacks claims under strict input isolation and audits the evidence ledger. |
 | [`compliance-reviewer.md`](compliance-reviewer.md) | Financial-services regulatory preflight: flags FINRA 2210 / SEC Marketing Rule risks and never clears content. |
 | [`taxonomy-miner.md`](taxonomy-miner.md) | Failure distillation agent: turns confirmed misses into taxonomy entries and known-answer test proposals. |
+| [`skills/analytics-spec-builder/SKILL.md`](skills/analytics-spec-builder/SKILL.md) | Installable skill for turning scoped analytics requests into implementation-ready specs. |
+| [`skills/analytics-spec-builder.zip`](skills/analytics-spec-builder.zip) | Packaged copy of the analytics spec builder skill for installation or distribution. |
+| [`skills/expo-mobile-app/SKILL.md`](skills/expo-mobile-app/SKILL.md) | Installable skill for building, reviewing, refactoring, and polishing Expo / React Native apps. |
+| [`skills/expo-mobile-app-skill.zip`](skills/expo-mobile-app-skill.zip) | Packaged copy of the Expo mobile app skill for installation or distribution. |
+| [`skills/gpt-5.5-xhigh-skill.zip`](skills/gpt-5.5-xhigh-skill.zip) | Zip-only Claude skill package for high-rigor analytics, BI, strategy, and executive decision-support work. |
 | [`Research Report.md`](Research%20Report.md) | Point-in-time June 2026 source material for a future Expo + beautiful mobile UI skill. Verify recency-sensitive claims before using. |
 
 Most files with frontmatter are intended to be usable as subagent definitions in a Claude Code-style environment. The orchestration file is for the main caller, not for the subagents themselves.
@@ -98,6 +103,46 @@ Skip steps consciously, not silently. If a T3 run skips premortem, redteam, or c
 
 **taxonomy-miner** protects the improvement loop from anecdote laundering. It reads existing taxonomy canon before evidence, distinguishes new entries from amendments, parks one-off incidents as candidates, and treats already-covered failures as binding failures of the protocol rather than taxonomy gaps.
 
+## Skill Packages
+
+**analytics-spec-builder** is a reusable skill for spec-driven analytics work. Use it when the user wants to create, tighten, review, or improve a specification for a scoped analytics deliverable: dashboards, reports, SQL/dbt models, metric definitions, semantic-layer changes, experiment or cohort analyses, data quality checks, reconciliations, KPI automation, notebooks, or analytics refactors.
+
+The skill's job is to make analytics work implementation-ready before code changes begin. It inspects relevant repo context, asks targeted high-value questions, separates facts from assumptions, and produces a spec with scope, data sources, metric logic, grain, filters, validation plan, acceptance criteria, risks, and open questions.
+
+Its core stance is deliberately pre-implementation:
+
+- Ask 3-5 material clarifying questions when important details are missing.
+- Do not ask what the repo can answer through read-only inspection.
+- Treat metric formulas, grain, filters, joins, refresh cadence, privacy constraints, and validation as contract details.
+- Avoid editing production code or dashboards while still in spec-building mode.
+- Keep the scope task-sized; split broad programs into separate analytics specs.
+
+**expo-mobile-app** is a reusable skill for Expo and React Native application work across iOS, Android, and web. Use it when the task touches Expo Router, app architecture, native-feeling UI, design systems, animation, gestures, haptics, accessibility, performance, native modules, testing, EAS Build/Update, or refactoring an existing Expo codebase.
+
+The skill's job is to make mobile app changes feel native, distinctive, smooth, accessible, and maintainable. It starts with a project audit, preserves existing conventions, prefers Expo-first and TypeScript-first choices, and treats design quality, states, accessibility, performance, and release implications as part of the engineering work.
+
+Its core stance is practical and product-minded:
+
+- Inspect `package.json`, app config, route tree, styling system, data layer, and tests before editing.
+- Prefer Expo conventions, Expo SDK modules, config plugins, development builds, and EAS profiles where they fit.
+- Match the existing architecture before introducing a new navigation, styling, state, or UI stack.
+- Build reusable UI primitives and design tokens before scattering one-off styles.
+- Validate non-trivial changes with the narrowest useful checks, such as Expo Doctor, lint, typecheck, tests, or simulator/device review.
+- Treat OTA updates, native runtime changes, secrets, permissions, accessibility, safe areas, keyboard behavior, and platform-specific behavior as part of the change contract.
+
+**gpt-5.5-xhigh** is a zip-only operating-mode skill for analytics, BI, strategy, finance, dashboarding, data modeling, large synthesis, and ambiguous high-stakes analytical work. It does not claim to change the underlying model; it pushes Claude toward an outcome-first, tool-grounded, verification-heavy style with explicit evidence, assumptions, risks, confidence, and decision implications.
+
+The skill is useful when the work needs senior analytical judgment rather than generic answer completion:
+
+- Frame the real decision, audience, artifact, time horizon, and success criteria.
+- Inspect available files, schemas, SQL, dashboards, docs, or data before asserting.
+- Define metric grains, windows, filters, numerators, denominators, exclusions, and ownership.
+- Validate numbers, reconcile totals, check edge cases, and look for contradictions.
+- Lead final answers with the recommendation or answer, then include the evidence and caveats needed to act.
+- Run a private "you can and MUST do better" self-evaluation pass before finalizing.
+
+The analytics and Expo zip archives contain the same `SKILL.md` file as their corresponding source directories. `gpt-5.5-xhigh-skill.zip` currently contains `.claude/skills/gpt-5.5-xhigh/SKILL.md` and has no unpacked source directory in this repo.
+
 ## Shared Conventions
 
 These files deliberately repeat some conventions because agent definitions cannot import shared text:
@@ -115,12 +160,13 @@ These files deliberately repeat some conventions because agent definitions canno
 
 1. Read [`fleet-orchestration.md`](fleet-orchestration.md) to understand routing and handoffs.
 2. Install or copy the agent definition files into your agent runtime's subagent location.
-3. Put the orchestration protocol somewhere the main agent will read, such as a project-level instruction file.
-4. For T3 analytics work, run `canon-scout` before `mega-opus-analytics`.
-5. For T3 worker runs, ask the worker for `plan-only`, run `premortem`, apply accepted amendments into `_work/`, then re-invoke the worker to execute.
-6. Invoke `mega-opus-redteam` only with the deliverable, raw inputs, and evidence ledger.
-7. Route anything that could travel through `compliance-reviewer`.
-8. Feed confirmed failures or user corrections into `taxonomy-miner`.
+3. Install or copy skills from `skills/` into your runtime's skill location; use the zip package when an installer expects an archive.
+4. Put the orchestration protocol somewhere the main agent will read, such as a project-level instruction file.
+5. For T3 analytics work, run `canon-scout` before `mega-opus-analytics`.
+6. For T3 worker runs, ask the worker for `plan-only`, run `premortem`, apply accepted amendments into `_work/`, then re-invoke the worker to execute.
+7. Invoke `mega-opus-redteam` only with the deliverable, raw inputs, and evidence ledger.
+8. Route anything that could travel through `compliance-reviewer`.
+9. Feed confirmed failures or user corrections into `taxonomy-miner`.
 
 If your runtime differs from Claude Code-style frontmatter (`name`, `description`, `tools`, `model`), keep the role instructions but adapt the metadata and tool names.
 
@@ -130,8 +176,10 @@ If your runtime differs from Claude Code-style frontmatter (`name`, `description
 - Keep redteam isolation strict. Passing worker reasoning into the redteam makes the redteam verdict materially weaker.
 - Keep compliance language conservative. The compliance agent flags and routes; it does not clear.
 - Keep taxonomy mining evidence-backed. One incident can be a candidate, but not a fully promoted pattern.
+- When changing packaged skills, update the unpacked `SKILL.md` first and regenerate the corresponding zip from that source.
+- For zip-only packages such as `gpt-5.5-xhigh-skill.zip`, extract to a source directory before making substantive edits, then regenerate the archive.
 - Check platform assumptions before operationalizing. Some prompts reference specific model names, tool names, and shell commands such as `sha256sum` that may need adaptation on macOS or other runtimes.
-- The Expo research report is source material, not an installed skill. Its ecosystem claims are dated June 2026 and should be verified against official docs before implementation.
+- The Expo research report is source material for the Expo mobile app skill. Its ecosystem claims are dated June 2026 and should be verified against official docs before implementation.
 
 ## Suggested Next Improvements
 
