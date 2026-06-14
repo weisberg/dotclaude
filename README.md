@@ -25,6 +25,7 @@ The core idea is simple: route work by **cost of being wrong**, then spend only 
 | [`skills/_packages/gpt-5.5-xhigh-skill.zip`](skills/_packages/gpt-5.5-xhigh-skill.zip) | Packaged copy of the GPT-5.5-xhigh operating skill for installation or distribution. |
 | [`skills/can-and-must-do-better/SKILL.md`](skills/can-and-must-do-better/SKILL.md) | Installable second-pass self-review skill for improving analytics, BI, strategy, code, and writing deliverables. |
 | [`skills/_packages/can-and-must-do-better-skill.zip`](skills/_packages/can-and-must-do-better-skill.zip) | Packaged copy of the can-and-must-do-better skill for installation or distribution. |
+| [`skills/opus-4.8-ultracode/SKILL.md`](skills/opus-4.8-ultracode/SKILL.md) | Installable ultracode-emulation skill for stakeholder-facing analytics, BI, and strategy results. |
 | [`skills/expo-mobile-app/references/expo-mobile-ui-research.md`](skills/expo-mobile-app/references/expo-mobile-ui-research.md) | Point-in-time June 2026 source material for the Expo mobile app skill. Verify recency-sensitive claims before using. |
 
 Files under `agents/` are intended to be usable as subagent definitions in a Claude Code-style environment. Files under `skills/<name>/SKILL.md` are installable skills. Zip artifacts live under `skills/_packages/` so the `skills/` directory contains both source skills and distributable packages without mixing them with root docs.
@@ -160,7 +161,18 @@ Its core stance is adversarial but constructive:
 - Fix the work directly when in scope; otherwise provide exact replacement text, test cases, patches, query changes, or revised analysis.
 - Never invent test results, citations, data checks, source contents, or validation.
 
-Each zip archive contains the same `SKILL.md` file as its corresponding source directory. Update the unpacked skill first, then refresh the zip so distribution matches the repo copy.
+**opus-4.8-ultracode** is a single-context operating skill for producing high-stakes analytics, BI, and strategy results when a true multi-agent ultracode setup is unavailable. It is for doing the analysis, not writing the spec for it.
+
+The skill emulates multi-agent rigor by forcing independent artifacts onto disk before later phases can anchor on earlier answers:
+
+- Reconstruct the task and lock constraints into `_work/brief.md`.
+- Write AUQ, inventory, and anchor registers before querying or reasoning.
+- Perform reconnaissance, predict-then-run execution, and a binary verification ledger.
+- Re-derive headline numbers by a structurally different route before comparing results.
+- Use independent decision lenses, steelman alternatives, adversarial refutation, and a final "you can and MUST do better" gate.
+- Return evidence, caveats, single-path warnings, unresolved questions, deferred work, and artifact paths.
+
+Each zip archive in `skills/_packages/` contains the same `SKILL.md` file as its corresponding source directory. Update the unpacked skill first, then refresh the zip so distribution matches the repo copy.
 
 ## Shared Conventions
 
