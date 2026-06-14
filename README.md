@@ -161,16 +161,17 @@ Its core stance is adversarial but constructive:
 - Fix the work directly when in scope; otherwise provide exact replacement text, test cases, patches, query changes, or revised analysis.
 - Never invent test results, citations, data checks, source contents, or validation.
 
-**opus-4.8-ultracode** is a single-context operating skill for producing high-stakes analytics, BI, and strategy results when a true multi-agent ultracode setup is unavailable. It is for doing the analysis, not writing the spec for it.
+**opus-4.8-ultracode** is a single-context operating skill for producing high-stakes analytics, BI, and strategy results when a true multi-agent ultracode setup is unavailable. It is for doing the analysis, not writing the spec for it. Prefer it over `gpt-5.5-xhigh` when the dominant risk is a single wrong number or claim that must survive independent recompute and adversarial refutation before a stakeholder acts.
 
-The skill emulates multi-agent rigor by forcing independent artifacts onto disk before later phases can anchor on earlier answers:
+The skill emulates multi-agent rigor by forcing independent artifacts onto disk before later phases can anchor on earlier answers. Its phase machine is built around six single-context failure modes: anchoring on the first reading, sample-as-completion, single-path numbers, self-review that inherits the original blind spot, constraint drift, and stopping at the first coherent answer.
 
-- Reconstruct the task and lock constraints into `_work/brief.md`.
+- Tier the work by cost of being wrong: T1 runs a premise/tripwire scan, T2 adds AUQ, recon, verification, re-derivation, discovery, adversarial review, and do-better gates, and T3 runs the full machine.
+- Reconstruct the task and lock verbatim constraints into `_work/brief.md`.
 - Write AUQ, inventory, and anchor registers before querying or reasoning.
 - Perform reconnaissance, predict-then-run execution, and a binary verification ledger.
 - Re-derive headline numbers by a structurally different route before comparing results.
-- Use independent decision lenses, steelman alternatives, adversarial refutation, and a final "you can and MUST do better" gate.
-- Return evidence, caveats, single-path warnings, unresolved questions, deferred work, and artifact paths.
+- For recommendations, use independent decision lenses, steelman alternatives, sensitivity checks, second-order response analysis, and explicit kill criteria.
+- Return evidence, caveats, single-path warnings, unresolved questions, deferred work, and artifact paths in a relayable contract.
 
 Each zip archive in `skills/_packages/` contains the same `SKILL.md` file as its corresponding source directory. Update the unpacked skill first, then refresh the zip so distribution matches the repo copy.
 
