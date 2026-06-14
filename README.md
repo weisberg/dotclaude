@@ -180,6 +180,7 @@ If your runtime differs from Claude Code-style frontmatter (`name`, `description
 - For zip-only packages such as `gpt-5.5-xhigh-skill.zip`, extract to a source directory before making substantive edits, then regenerate the archive.
 - Check platform assumptions before operationalizing. Some prompts reference specific model names, tool names, and shell commands such as `sha256sum` that may need adaptation on macOS or other runtimes.
 - The Expo research report is source material for the Expo mobile app skill. Its ecosystem claims are dated June 2026 and should be verified against official docs before implementation.
+- Local runtime files such as `.claude/settings.local.json` may exist for machine-specific permissions and are intentionally not tracked.
 
 ## Suggested Next Improvements
 
