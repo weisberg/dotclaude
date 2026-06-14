@@ -20,7 +20,10 @@ The core idea is simple: route work by **cost of being wrong**, then spend only 
 | [`skills/analytics-spec-builder.zip`](skills/analytics-spec-builder.zip) | Packaged copy of the analytics spec builder skill for installation or distribution. |
 | [`skills/expo-mobile-app/SKILL.md`](skills/expo-mobile-app/SKILL.md) | Installable skill for building, reviewing, refactoring, and polishing Expo / React Native apps. |
 | [`skills/expo-mobile-app-skill.zip`](skills/expo-mobile-app-skill.zip) | Packaged copy of the Expo mobile app skill for installation or distribution. |
-| [`skills/gpt-5.5-xhigh-skill.zip`](skills/gpt-5.5-xhigh-skill.zip) | Zip-only Claude skill package for high-rigor analytics, BI, strategy, and executive decision-support work. |
+| [`skills/gpt-5.5-xhigh/SKILL.md`](skills/gpt-5.5-xhigh/SKILL.md) | Installable operating-mode skill for high-rigor analytics, BI, strategy, and executive decision-support work. |
+| [`skills/gpt-5.5-xhigh-skill.zip`](skills/gpt-5.5-xhigh-skill.zip) | Packaged copy of the GPT-5.5-xhigh operating skill for installation or distribution. |
+| [`skills/can-and-must-do-better/SKILL.md`](skills/can-and-must-do-better/SKILL.md) | Installable second-pass self-review skill for improving analytics, BI, strategy, code, and writing deliverables. |
+| [`skills/can-and-must-do-better-skill.zip`](skills/can-and-must-do-better-skill.zip) | Packaged copy of the can-and-must-do-better skill for installation or distribution. |
 | [`Research Report.md`](Research%20Report.md) | Point-in-time June 2026 source material for a future Expo + beautiful mobile UI skill. Verify recency-sensitive claims before using. |
 
 Most files with frontmatter are intended to be usable as subagent definitions in a Claude Code-style environment. The orchestration file is for the main caller, not for the subagents themselves.
@@ -130,7 +133,7 @@ Its core stance is practical and product-minded:
 - Validate non-trivial changes with the narrowest useful checks, such as Expo Doctor, lint, typecheck, tests, or simulator/device review.
 - Treat OTA updates, native runtime changes, secrets, permissions, accessibility, safe areas, keyboard behavior, and platform-specific behavior as part of the change contract.
 
-**gpt-5.5-xhigh** is a zip-only operating-mode skill for analytics, BI, strategy, finance, dashboarding, data modeling, large synthesis, and ambiguous high-stakes analytical work. It does not claim to change the underlying model; it pushes Claude toward an outcome-first, tool-grounded, verification-heavy style with explicit evidence, assumptions, risks, confidence, and decision implications.
+**gpt-5.5-xhigh** is an operating-mode skill for analytics, BI, strategy, finance, dashboarding, data modeling, large synthesis, and ambiguous high-stakes analytical work. It does not claim to change the underlying model; it pushes Claude toward an outcome-first, tool-grounded, verification-heavy style with explicit evidence, assumptions, risks, confidence, and decision implications.
 
 The skill is useful when the work needs senior analytical judgment rather than generic answer completion:
 
@@ -141,7 +144,20 @@ The skill is useful when the work needs senior analytical judgment rather than g
 - Lead final answers with the recommendation or answer, then include the evidence and caveats needed to act.
 - Run a private "you can and MUST do better" self-evaluation pass before finalizing.
 
-The analytics and Expo zip archives contain the same `SKILL.md` file as their corresponding source directories. `gpt-5.5-xhigh-skill.zip` currently contains `.claude/skills/gpt-5.5-xhigh/SKILL.md` and has no unpacked source directory in this repo.
+**can-and-must-do-better** is a second-pass review and improvement skill. Use it after producing or modifying a nontrivial artifact, or when the user asks for critique, audit, refinement, revision, final check, or a higher-quality answer before delivery.
+
+The skill's job is not to defend the current draft. It reconstructs the original job, inspects available evidence, applies the relevant review lenses, finds the highest-impact defects, improves the work directly when safe, verifies the result, and repeats once for remaining material issues.
+
+Its core stance is adversarial but constructive:
+
+- Treat "you can and MUST do better" as a demand for concrete improvement, not just critique.
+- Prioritize P0/P1 defects over polish.
+- Use analytics, code, strategy, writing, security, and communication lenses as applicable.
+- Ground the review in files, diffs, queries, specs, drafts, or source material rather than memory.
+- Fix the work directly when in scope; otherwise provide exact replacement text, test cases, patches, query changes, or revised analysis.
+- Never invent test results, citations, data checks, source contents, or validation.
+
+Each zip archive contains the same `SKILL.md` file as its corresponding source directory. Update the unpacked skill first, then refresh the zip so distribution matches the repo copy.
 
 ## Shared Conventions
 
@@ -177,7 +193,6 @@ If your runtime differs from Claude Code-style frontmatter (`name`, `description
 - Keep compliance language conservative. The compliance agent flags and routes; it does not clear.
 - Keep taxonomy mining evidence-backed. One incident can be a candidate, but not a fully promoted pattern.
 - When changing packaged skills, update the unpacked `SKILL.md` first and regenerate the corresponding zip from that source.
-- For zip-only packages such as `gpt-5.5-xhigh-skill.zip`, extract to a source directory before making substantive edits, then regenerate the archive.
 - Check platform assumptions before operationalizing. Some prompts reference specific model names, tool names, and shell commands such as `sha256sum` that may need adaptation on macOS or other runtimes.
 - The Expo research report is source material for the Expo mobile app skill. Its ecosystem claims are dated June 2026 and should be verified against official docs before implementation.
 - Local runtime files such as `.claude/settings.local.json` may exist for machine-specific permissions and are intentionally not tracked.
