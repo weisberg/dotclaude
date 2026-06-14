@@ -9,7 +9,22 @@ The core idea is simple: route work by **cost of being wrong**, then spend only 
 | File | Purpose |
 |---|---|
 | [`docs/fleet-orchestration.md`](docs/fleet-orchestration.md) | The conductor protocol: tier routing, T3 lifecycle, handoff payloads, verdict handling, relay discipline. Read this first. |
-| [`docs/ultracode-high-clone-prd-chat.md`](docs/ultracode-high-clone-prd-chat.md) | Draft PRD for a future `ultracode-high` Claude Code orchestration layer that stays on Claude Opus 4.8 High while recreating Ultracode-style routing, fan-out, verification, and final gating. |
+| [`docs/ultracode-high-clone-prd-chat.md`](docs/ultracode-high-clone-prd-chat.md) | Source PRD for the `ultracode-high` Claude Code orchestration scaffold: Opus 4.8 High-only routing, fan-out, verification, and final gating. |
+| [`docs/ultracode-high-clone-prd-merged.md`](docs/ultracode-high-clone-prd-merged.md) | Merged v1.1 PRD (configuration of record) that adds the verification spine: plan critique, gated manifests, `gate-kit`, `verification-runner-high`, and known-answer self-tests. |
+| [`agents/*-high.md`](agents) | Opus 4.8 High subagent scaffold from the `ultracode-high` PRDs: orchestrator, cartographer, plan critic, implementer, verification runner, reviewers, critics, migration/debug specialists, and final integrator. |
+| [`skills/ultracode-high/SKILL.md`](skills/ultracode-high/SKILL.md) | Top-level Opus 4.8 High-only orchestration skill that classifies S0-S4 scope, delegates work, verifies, improves, and reports. |
+| [`skills/ultracode-high/references/runtime-context.md`](skills/ultracode-high/references/runtime-context.md) | Canonical runtime map for High-only agents and skills: grand scheme, five failure modes, scope routing, tools, skills, agent roster, gates, cards, and safety. |
+| [`skills/task-intake-contract/SKILL.md`](skills/task-intake-contract/SKILL.md) | Intake contract skill for converting messy requests into goals, constraints, acceptance criteria, missing decisions, and verification targets. |
+| [`skills/decomposition-router/SKILL.md`](skills/decomposition-router/SKILL.md) | Router skill for classifying S0-S4 scope and choosing the minimal sufficient subagent set. |
+| [`skills/gate-kit/SKILL.md`](skills/gate-kit/SKILL.md) | Gate vocabulary and runner skill for command/file/grep/attest gates, with bundled `gate_check.py`, schema, and example manifest. |
+| [`skills/implementation-contract/SKILL.md`](skills/implementation-contract/SKILL.md) | Implementation discipline skill for minimal diffs, repo conventions, tests, rollback notes, and honest verification. |
+| [`skills/verification-matrix/SKILL.md`](skills/verification-matrix/SKILL.md) | Verification-card skill for code, analytics, BI, writing, strategy, and docs checks. |
+| [`skills/evidence-ledger/SKILL.md`](skills/evidence-ledger/SKILL.md) | Evidence-ledger skill for labeling claims as verified, calculated, inferred, assumed, or unknown. |
+| [`skills/context-ledger/SKILL.md`](skills/context-ledger/SKILL.md) | Compact context and handoff ledger skill for long sessions and compaction. |
+| [`skills/final-report/SKILL.md`](skills/final-report/SKILL.md) | Final response contract skill for results, changes, verification, improvements, risks, and next actions. |
+| [`skills/selftest-kit/SKILL.md`](skills/selftest-kit/SKILL.md) | Known-answer self-test skill for proving the orchestration mechanism catches planted completion, verification, drift, confabulation, and bad-plan failures. |
+| [`skills/{analytics-bi-rigor,strategy-rigor,writing-rigor,security-rigor,performance-rigor,ux-dashboard-rigor}/SKILL.md`](skills) | Domain rigor skills used by the High-only reviewer and critic agents. |
+| [`skills/{high-code-research,high-code-review,high-code-verify,high-code-final-gate}/SKILL.md`](skills) | Fork-style workflow skills for isolated repo research, diff review, verification, and final gating. |
 | [`agents/mega-opus-generalist.md`](agents/mega-opus-generalist.md) | High-rigor worker for complex non-analytics tasks: research, writing, code, planning, reviews, decision support. |
 | [`agents/mega-opus-analytics.md`](agents/mega-opus-analytics.md) | High-rigor worker for stakeholder-facing SQL and analytics: metric definitions, recon, query discipline, verification ledger, recomputation. |
 | [`agents/canon-scout.md`](agents/canon-scout.md) | Metric provenance agent: finds canonical definitions, variants, conflicts, and anchor values before analytics work starts. |
@@ -94,19 +109,21 @@ For high-stakes work, the intended sequence is:
 
 Skip steps consciously, not silently. If a T3 run skips premortem, redteam, or compliance review, that absence is information the user should see.
 
-## Design Backlog
+## Ultracode High Scaffold
 
-[`docs/ultracode-high-clone-prd-chat.md`](docs/ultracode-high-clone-prd-chat.md) is a draft product spec, not an implemented runtime package. It describes `ultracode-high`: a Claude Code mode that would approximate Ultracode-style behavior while pinning every agent and skill to Claude Opus 4.8 with `effort: high`.
+[`docs/ultracode-high-clone-prd-chat.md`](docs/ultracode-high-clone-prd-chat.md) and [`docs/ultracode-high-clone-prd-merged.md`](docs/ultracode-high-clone-prd-merged.md) are the product specs for `ultracode-high`: a Claude Code mode that approximates Ultracode-style behavior while pinning every agent and skill to Claude Opus 4.8 with `effort: high`. The first repo-local scaffold now exists under `skills/` and `agents/` as 21 High-only subagents and 20 skills, plus shared runtime context and the `gate-kit` runner.
 
-The PRD's main design choices are:
+The scaffold implements the PRD's main design choices:
 
 - A five-level router, S0-S4, that keeps simple work direct and reserves subagent fan-out for tasks with real parallelism or risk.
-- A required High-only agent set: orchestrator, repo cartographer, implementation worker, test/build runner, adversarial reviewer, and final integrator.
+- A required High-only agent set: orchestrator, repo cartographer, plan critic, implementation worker, verification runner, test/build runner, adversarial reviewer, and final integrator.
+- A gated-manifest spine: every S2+ work item gets precondition/completion gates, and `plan-critic-high` blocks fan-out when decomposition or gates are weak.
+- A domain-adaptive verification layer: command gates where possible, flagged attestation when judgment is unavoidable, plus known-answer tests in `selftest-kit`.
 - Domain reviewers for analytics/BI, strategy, writing, security, performance, UX/dashboard work, context compression, and regression risk.
 - Structured work package, finding, verification, context-ledger, and final-report cards so subagents return usable evidence instead of raw logs.
-- A phased rollout: MVP skills and agents first, domain specialists second, then optional hooks, saved workflows, worktree isolation, and agent-team experiments.
+- Optional Phase 3 specialists for migrations, debugging hypotheses, dependency impact, release notes, and benchmarks.
 
-Treat it as the roadmap for a possible next layer above this repo's current agents and skills. The existing fleet is the working prompt library; `ultracode-high` is the design for packaging similar discipline into a more automatic Claude Code orchestration experience.
+Hooks, saved workflows, package archives, and runtime installation glue are still future work.
 
 ## Agent Design Notes
 
@@ -246,4 +263,4 @@ If your runtime differs from Claude Code-style frontmatter (`name`, `description
 - Add a small install guide for the exact target runtime once the deployment location is chosen.
 - Add known-answer fixtures for the analytics/redteam path, especially a passing SRM case that should return `CLEARED` with shown work.
 - Add a portability pass for model labels, tool names, and hashing commands.
-- Package `gpt-5.5-pro` and `opus-4.8-ultracode` into `skills/_packages/` if they need archive-based distribution.
+- Package `gpt-5.5-pro`, `opus-4.8-ultracode`, and the `ultracode-high` skill family into `skills/_packages/` if they need archive-based distribution.

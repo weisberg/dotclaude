@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ultracode-high gates",
+  "type": "object",
+  "required": ["gates"],
+  "properties": {
+    "gates": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "type", "description"],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "type": {
+            "enum": ["command", "file_exists", "grep", "attest"]
+          },
+          "description": {
+            "type": "string"
+          },
+          "cmd": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "pattern": {
+            "type": "string"
+          },
+          "negate": {
+            "type": "boolean",
+            "description": "For grep gates: when true, the gate passes only if the pattern does NOT appear."
+          },
+          "answer": {
+            "type": "boolean"
+          },
+          "evidence": {
+            "type": "string"
+          }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "type": {
+                  "const": "command"
+                }
+              }
+            },
+            "then": {
+              "required": ["cmd"]
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "type": {
+                  "const": "file_exists"
+                }
+              }
+            },
+            "then": {
+              "required": ["path"]
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "type": {
+                  "const": "grep"
+                }
+              }
+            },
+            "then": {
+              "required": ["path", "pattern"]
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "type": {
+                  "const": "attest"
+                }
+              }
+            },
+            "then": {
+              "required": ["answer", "evidence"]
+            }
+          }
+        ]
+      }
+    }
+  }
+}

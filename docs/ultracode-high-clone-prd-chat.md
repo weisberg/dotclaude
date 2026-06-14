@@ -1,11 +1,19 @@
 # PRD: `ultracode-high` — an Ultracode-style orchestration clone for Claude Code using only Claude Opus 4.8 High
 
 **Owner:** Brian / Analytics + Engineering Productivity  
-**Status:** Draft v0.1  
+**Status:** Superseded draft v0.1
 **Target platform:** Claude Code  
 **Strict model constraint:** Claude Opus 4.8 only, `effort: high` only  
 **Primary artifacts to create:** Claude Code skills under `.claude/skills/` and subagents under `.claude/agents/`  
 **Optional supporting artifacts:** hooks, saved workflows, plugin wrapper, repo-local conventions in `CLAUDE.md`
+
+---
+
+## Supersession note
+
+The implemented configuration is captured in [`ultracode-high-clone-prd-merged.md`](ultracode-high-clone-prd-merged.md). The final scaffold we went with is repo-source first: skills live under `skills/`, subagents live under `agents/`, install into `.claude/` is a later copy/link step, and every new High-only agent plus orchestration skill points to `skills/ultracode-high/references/runtime-context.md` for the full fleet map.
+
+The merged PRD is the configuration of record because it adds the verification spine that this draft did not fully specify: `plan-critic-high`, `verification-runner-high`, `gate-kit`, `selftest-kit`, gated manifests, command-vs-attest verification, and known-answer tests.
 
 ---
 
@@ -1156,4 +1164,3 @@ The clone should deliberately avoid pretending to be native Ultracode. Its value
 ## Source notes
 
 This PRD is based on the official Claude Code documentation for dynamic workflows, custom subagents, skills, forks, agent teams, hooks, and Anthropic guidance for Claude Opus 4.8 effort levels and prompting behavior.
-

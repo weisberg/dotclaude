@@ -1,0 +1,44 @@
+{
+  "gates": [
+    {
+      "id": "runner-exists",
+      "type": "file_exists",
+      "path": "skills/gate-kit/scripts/gate_check.py",
+      "description": "gate runner is present"
+    },
+    {
+      "id": "schema-exists",
+      "type": "file_exists",
+      "path": "skills/gate-kit/references/gates.schema.json",
+      "description": "gate schema is present"
+    },
+    {
+      "id": "skill-titled",
+      "type": "grep",
+      "path": "skills/gate-kit/SKILL.md",
+      "pattern": "^# Gate Kit",
+      "description": "gate-kit skill has its title heading"
+    },
+    {
+      "id": "no-todo-marker",
+      "type": "grep",
+      "path": "skills/gate-kit/references/gates.schema.json",
+      "pattern": "TODO",
+      "negate": true,
+      "description": "no leftover TODO marker in the schema (negated grep)"
+    },
+    {
+      "id": "python-stdlib",
+      "type": "command",
+      "cmd": "python3 -c \"import json, re, subprocess\"",
+      "description": "runner stdlib dependencies import cleanly"
+    },
+    {
+      "id": "judgment-check",
+      "type": "attest",
+      "answer": true,
+      "evidence": "example attestation gate; replace with a real binary judgment in your run",
+      "description": "demonstrates a flagged attest gate"
+    }
+  ]
+}
