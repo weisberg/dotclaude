@@ -9,6 +9,7 @@ The core idea is simple: route work by **cost of being wrong**, then spend only 
 | File | Purpose |
 |---|---|
 | [`docs/fleet-orchestration.md`](docs/fleet-orchestration.md) | The conductor protocol: tier routing, T3 lifecycle, handoff payloads, verdict handling, relay discipline. Read this first. |
+| [`docs/ultracode-high-clone-prd-chat.md`](docs/ultracode-high-clone-prd-chat.md) | Draft PRD for a future `ultracode-high` Claude Code orchestration layer that stays on Claude Opus 4.8 High while recreating Ultracode-style routing, fan-out, verification, and final gating. |
 | [`agents/mega-opus-generalist.md`](agents/mega-opus-generalist.md) | High-rigor worker for complex non-analytics tasks: research, writing, code, planning, reviews, decision support. |
 | [`agents/mega-opus-analytics.md`](agents/mega-opus-analytics.md) | High-rigor worker for stakeholder-facing SQL and analytics: metric definitions, recon, query discipline, verification ledger, recomputation. |
 | [`agents/canon-scout.md`](agents/canon-scout.md) | Metric provenance agent: finds canonical definitions, variants, conflicts, and anchor values before analytics work starts. |
@@ -23,6 +24,7 @@ The core idea is simple: route work by **cost of being wrong**, then spend only 
 | [`skills/_packages/expo-mobile-app-skill.zip`](skills/_packages/expo-mobile-app-skill.zip) | Packaged copy of the Expo mobile app skill for installation or distribution. |
 | [`skills/gpt-5.5-xhigh/SKILL.md`](skills/gpt-5.5-xhigh/SKILL.md) | Installable operating-mode skill for high-rigor analytics, BI, strategy, and executive decision-support work. |
 | [`skills/_packages/gpt-5.5-xhigh-skill.zip`](skills/_packages/gpt-5.5-xhigh-skill.zip) | Packaged copy of the GPT-5.5-xhigh operating skill for installation or distribution. |
+| [`skills/gpt-5.5-pro/SKILL.md`](skills/gpt-5.5-pro/SKILL.md) | Installable GPT-5.5-Pro-style operating-mode skill for analytics, BI, data science, finance, and strategy work on Claude Opus 4.8. |
 | [`skills/can-and-must-do-better/SKILL.md`](skills/can-and-must-do-better/SKILL.md) | Installable second-pass self-review skill for improving analytics, BI, strategy, code, and writing deliverables. |
 | [`skills/_packages/can-and-must-do-better-skill.zip`](skills/_packages/can-and-must-do-better-skill.zip) | Packaged copy of the can-and-must-do-better skill for installation or distribution. |
 | [`skills/opus-4.8-ultracode/SKILL.md`](skills/opus-4.8-ultracode/SKILL.md) | Installable ultracode-emulation skill for stakeholder-facing analytics, BI, and strategy results. |
@@ -92,6 +94,20 @@ For high-stakes work, the intended sequence is:
 
 Skip steps consciously, not silently. If a T3 run skips premortem, redteam, or compliance review, that absence is information the user should see.
 
+## Design Backlog
+
+[`docs/ultracode-high-clone-prd-chat.md`](docs/ultracode-high-clone-prd-chat.md) is a draft product spec, not an implemented runtime package. It describes `ultracode-high`: a Claude Code mode that would approximate Ultracode-style behavior while pinning every agent and skill to Claude Opus 4.8 with `effort: high`.
+
+The PRD's main design choices are:
+
+- A five-level router, S0-S4, that keeps simple work direct and reserves subagent fan-out for tasks with real parallelism or risk.
+- A required High-only agent set: orchestrator, repo cartographer, implementation worker, test/build runner, adversarial reviewer, and final integrator.
+- Domain reviewers for analytics/BI, strategy, writing, security, performance, UX/dashboard work, context compression, and regression risk.
+- Structured work package, finding, verification, context-ledger, and final-report cards so subagents return usable evidence instead of raw logs.
+- A phased rollout: MVP skills and agents first, domain specialists second, then optional hooks, saved workflows, worktree isolation, and agent-team experiments.
+
+Treat it as the roadmap for a possible next layer above this repo's current agents and skills. The existing fleet is the working prompt library; `ultracode-high` is the design for packaging similar discipline into a more automatic Claude Code orchestration experience.
+
 ## Agent Design Notes
 
 **mega-opus-generalist** is the general high-rigor worker. Its failure model is lossy delegation: the brief is compressed, mid-run user questions are unavailable, and the final message is the product. It counters that with task reconstruction, AUQ, explicit gates, prediction-before-action, domain-specific disciplines, inversion pass, and a structured return contract.
@@ -147,6 +163,17 @@ The skill is useful when the work needs senior analytical judgment rather than g
 - Validate numbers, reconcile totals, check edge cases, and look for contradictions.
 - Lead final answers with the recommendation or answer, then include the evidence and caveats needed to act.
 - Run a private "you can and MUST do better" self-evaluation pass before finalizing.
+
+**gpt-5.5-pro** is a sibling operating-mode skill for analytics, BI, data science, finance, and strategy work. It makes the same identity boundary explicit: Claude remains Claude Opus 4.8, but follows GPT-5.5-Pro-like operating discipline around persistent tool use, evidence-first reasoning, executive-grade synthesis, and rigorous self-verification.
+
+Its center of gravity is broad analytical delivery:
+
+- Start from the decision, audience, time horizon, risk, and artifact.
+- Inspect source files, dashboards, schemas, notebooks, logs, and repo code directly when available.
+- Track claims as `VERIFIED`, `CALCULATED`, `INFERRED`, `ASSUMPTION`, or `UNKNOWN`.
+- Use dedicated workflows for analytics, BI semantics, SQL/data modeling, notebooks/statistics, strategy, and financial modeling.
+- Produce usable artifacts rather than methodology outlines, with validation guidance for technical outputs.
+- Escalate broad audits or multi-domain work to subagents or dynamic workflows when independent review materially improves quality.
 
 **can-and-must-do-better** is a second-pass review and improvement skill. Use it after producing or modifying a nontrivial artifact, or when the user asks for critique, audit, refinement, revision, final check, or a higher-quality answer before delivery.
 
@@ -219,3 +246,4 @@ If your runtime differs from Claude Code-style frontmatter (`name`, `description
 - Add a small install guide for the exact target runtime once the deployment location is chosen.
 - Add known-answer fixtures for the analytics/redteam path, especially a passing SRM case that should return `CLEARED` with shown work.
 - Add a portability pass for model labels, tool names, and hashing commands.
+- Package `gpt-5.5-pro` and `opus-4.8-ultracode` into `skills/_packages/` if they need archive-based distribution.
